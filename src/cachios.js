@@ -30,19 +30,19 @@ function Cachios(axiosInstance, nodeCacheConf) {
   this.getResponseCopy = defaultResponseCopier;
 }
 
-Cachios.prototype.getCacheKey = function (config) {
+Cachios.prototype.getCacheKey = function getCacheKey(config) {
   return hash(this.getCacheIdentifier(config));
 };
 
-Cachios.prototype.getCachedValue = function (cacheKey) {
+Cachios.prototype.getCachedValue = function getCachedValue(cacheKey) {
   return this.cache.get(cacheKey);
 };
 
-Cachios.prototype.setCachedValue = function (cacheKey, value, ttl) {
+Cachios.prototype.setCachedValue = function setCachedValue(cacheKey, value, ttl) {
   return this.cache.set(cacheKey, value, ttl);
 };
 
-Cachios.prototype.request = function (config) {
+Cachios.prototype.request = function request(config) {
   const ttl = config.ttl;
 
   const cacheKey = this.getCacheKey(config);
