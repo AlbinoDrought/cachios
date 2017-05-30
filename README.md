@@ -19,7 +19,7 @@ Cachios is meant to be an easy drop-in for `axios` and adds caching capabilites 
 * put
 * patch
 
-The entire response is not cached, and is instead trimmed down to `status` and `data`. To configure this, see "Custom Response Copier".
+The entire response is not cached, and is instead trimmed down to `status` and `data`. To configure this, see ["Custom Response Copier"](#custom-response-copier).
 
 ### TTL
 
