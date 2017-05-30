@@ -2,7 +2,7 @@
 
 A simple `axios` cache wrapper using `node-cache`.
 
-## Description
+---
 
 Cachios is meant to be an easy drop-in for `axios` and adds caching capabilites to the following methods:
 
