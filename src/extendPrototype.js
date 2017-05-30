@@ -14,7 +14,7 @@ const dataMethods = [
 
 function extendPrototype(cachiosPrototype) {
   datalessMethods.forEach((method) => {
-    cachiosPrototype[method] = (url, config) => {
+    cachiosPrototype[method] = function aliasDatalessMethod(url, config) {
       const baseRequest = {
         url,
         method,
@@ -22,12 +22,12 @@ function extendPrototype(cachiosPrototype) {
 
       const mergedRequest = Object.assign(config || {}, baseRequest);
 
-      return cachiosPrototype.request(mergedRequest);
+      return this.request(mergedRequest);
     };
   });
 
   dataMethods.forEach((method) => {
-    cachiosPrototype[method] = (url, data, config) => {
+    cachiosPrototype[method] = function aliasDataMethod(url, data, config) {
       const baseRequest = {
         url,
         method,
@@ -36,7 +36,7 @@ function extendPrototype(cachiosPrototype) {
 
       const mergedRequest = Object.assign(config || {}, baseRequest);
 
-      return cachiosPrototype.request(mergedRequest);
+      return this.request(mergedRequest);
     };
   });
 }
