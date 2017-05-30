@@ -62,6 +62,10 @@ cachiosInstance.post('/posts/1', postData, {
 
 ```
 
+Multiple cached GET requests: [Runkit](https://runkit.com/albinodrought/cachios-get-example)
+
+Multiple cached GET requests with different query parameters: [Runkit](https://runkit.com/albinodrought/cachios-get-params-example)
+
 ## Configuration
 
 ### TTL
