@@ -1,5 +1,10 @@
 # Cachios
 
+[![Dependency Status](https://david-dm.org/albinodrought/cachios.svg)](https://david-dm.org/albinodrought/cachios)
+[![npm version](https://badge.fury.io/js/cachios.svg)](https://badge.fury.io/js/cachios)
+
+[![NPM](https://nodei.co/npm/cachios.png)](https://nodei.co/npm/cachios/)
+
 A simple `axios` cache wrapper using `node-cache`.
 
 ---
