@@ -25,7 +25,7 @@ The entire response is not cached, and is instead trimmed down (by default) to `
 
 Basic:
 
-```
+```js
 const cachios = require('cachios');
 
 cachios.get('https://jsonplaceholder.typicode.com/posts/1', {
@@ -36,7 +36,7 @@ cachios.get('https://jsonplaceholder.typicode.com/posts/1', {
 
 Custom axios client:
 
-```
+```js
 // your normal, non-cached axios instance that is already setup.
 import axios from './configured-axios';
 
@@ -63,7 +63,7 @@ cachiosInstance.post('/posts/1', postData, {
 
 To set the cache TTL, pass it in with your request config:
 
-```
+```js
 const cachios = require('cachios');
 
 cachios.get('url', {
@@ -82,7 +82,7 @@ cachios.post('url', postData, {
 
 Cachios also supports using a pre-configured `axios` instance:
 
-```
+```js
 const cachios = require('cachios');
 const axios = require('axios');
 
@@ -98,7 +98,7 @@ const cachiosInstance = cachios.create(axiosInstance);
 
 Internally, Cachios uses `node-cache` with sane defaults. To configure it yourself, pass it during `cachios.create`:
 
-```
+```js
 const cachios = require('cachios');
 const axios = require('axios');
 
@@ -113,7 +113,7 @@ const cachiosInstance = cachios.create(axios, {
 
 By default, Cachios uses the following function to trim responses:
 
-```
+```js
 function defaultResponseCopier(response) {
   return {
     status: response.status,
@@ -126,7 +126,7 @@ This was originally implemented because of errors during response storage.
 
 To change what is saved, set the `getResponseCopy` property of your Cachios instance:
 
-```
+```js
 const cachios = require('cachios');
 
 cachios.getResponseCopy = function (response) {
@@ -142,7 +142,7 @@ cachios.getResponseCopy = function (response) {
 
 By default, Cachios uses the following function to create a unique cache identifier:
 
-```
+```js
 function defaultCacheIdentifer(config) {
   return {
     method: config.method,
@@ -155,7 +155,7 @@ function defaultCacheIdentifer(config) {
 
 To override this, set the `getCacheIdentifier` property of your Cachios instance:
 
-```
+```js
 const cachios = require('cachios');
 
 cachios.getCacheIdentifier = function (config) {
