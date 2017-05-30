@@ -1,12 +1,8 @@
 # Cachios
 
-A simple `axios` cache wrapper using `node-cache`
+A simple `axios` cache wrapper using `node-cache`.
 
-## Installation
-
-`npm install --save cachios`
-
-## Usage
+## Description
 
 Cachios is meant to be an easy drop-in for `axios` and adds caching capabilites to the following methods:
 
@@ -19,7 +15,49 @@ Cachios is meant to be an easy drop-in for `axios` and adds caching capabilites 
 * put
 * patch
 
-The entire response is not cached, and is instead trimmed down to `status` and `data`. To configure this, see ["Custom Response Copier"](#custom-response-copier).
+The entire response is not cached, and is instead trimmed down (by default) to `status` and `data`. To configure this, see ["Custom Response Copier"](#custom-response-copier).
+
+## Installation
+
+`npm install --save cachios`
+
+## Examples
+
+Basic:
+
+```
+const cachios = require('cachios');
+
+cachios.get('https://jsonplaceholder.typicode.com/posts/1', {
+  ttl: 300 /* seconds */,
+}).then(console.log);
+
+```
+
+Custom axios client:
+
+```
+// your normal, non-cached axios instance that is already setup.
+import axios from './configured-axios';
+
+const cachios = require('cachios');
+const cachiosInstance = cachios.create(axios);
+
+const postData = {/* your postdata here */};
+
+cachiosInstance.post('/posts/1', postData, {
+  ttl: 30, // persist 30 seconds
+}).then((resp) => {
+  console.log(resp.status);
+
+  const data = resp.data;
+  console.log(data.title);
+  console.log(data.body);
+});
+
+```
+
+## Configuration
 
 ### TTL
 
@@ -131,38 +169,6 @@ cachios.getCacheIdentifier = function (config) {
 };
 ```
 
-## Examples
+## License
 
-Basic:
-
-```
-const cachios = require('cachios');
-
-cachios.get('https://jsonplaceholder.typicode.com/posts/1', {
-  ttl: 300 /* seconds */,
-}).then(console.log);
-
-```
-
-Custom axios client:
-
-```
-// your normal, non-cached axios instance that is already setup.
-import axios from './configured-axios';
-
-const cachios = require('cachios');
-const cachiosInstance = cachios.create(axios);
-
-const postData = {/* your postdata here */};
-
-cachiosInstance.post('/posts/1', postData, {
-  ttl: 30, // persist 30 seconds
-}).then((resp) => {
-  console.log(resp.status);
-
-  const data = resp.data;
-  console.log(data.title);
-  console.log(data.body);
-});
-
-```
+[MIT](LICENSE.md)
