@@ -1,0 +1,35 @@
+{
+  "name": "cachios",
+  "version": "0.0.1",
+  "description": "Simple axios cache wrapper using node-cache",
+  "main": "src/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/AlbinoDrought/cachios.git"
+  },
+  "keywords": [
+    "axios",
+    "cache"
+  ],
+  "author": "AlbinoDrought",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/AlbinoDrought/cachios/issues"
+  },
+  "homepage": "https://github.com/AlbinoDrought/cachios#readme",
+  "dependencies": {
+    "axios": "^0.16.1",
+    "babel-eslint": "^7.2.3",
+    "node-cache": "^4.1.1",
+    "object-hash": "^1.1.8"
+  },
+  "devDependencies": {
+    "eslint": "^3.19.0",
+    "eslint-config-airbnb-base": "^11.2.0",
+    "eslint-plugin-import": "^2.3.0",
+    "mocha": "^3.4.2"
+  }
+}
