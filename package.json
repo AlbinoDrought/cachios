@@ -22,11 +22,11 @@
   "homepage": "https://github.com/AlbinoDrought/cachios#readme",
   "dependencies": {
     "axios": "^0.16.1",
-    "babel-eslint": "^7.2.3",
     "node-cache": "^4.1.1",
     "object-hash": "^1.1.8"
   },
   "devDependencies": {
+    "babel-eslint": "^7.2.3",
     "eslint": "^3.19.0",
     "eslint-config-airbnb-base": "^11.2.0",
     "eslint-plugin-import": "^2.3.0",
