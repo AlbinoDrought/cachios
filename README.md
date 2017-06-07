@@ -2,6 +2,7 @@
 
 [![Dependency Status](https://david-dm.org/albinodrought/cachios.svg)](https://david-dm.org/albinodrought/cachios)
 [![npm version](https://badge.fury.io/js/cachios.svg)](https://badge.fury.io/js/cachios)
+[![Travis](https://img.shields.io/travis/rust-lang/rust.svg)](https://travis-ci.org/AlbinoDrought/cachios)
 
 [![NPM](https://nodei.co/npm/cachios.png)](https://nodei.co/npm/cachios/)
 
