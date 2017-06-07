@@ -35,6 +35,20 @@ describe('cachios', function () {
 
   datalessMethods.forEach((method) => {
     describe('helper method ' + method, function() {
+      it('should work with default options', function(done) {
+        const cachiosInstance = cachios.create(axios);
+        const url = 'http://localhost/fake-url';
+
+        cachiosInstance[method](url).then(() => { done(); });
+
+        moxios.wait(function() {
+          moxios.requests.mostRecent().respondWith({
+            status: 200,
+            response: {},
+          });
+        });
+      });
+
       it('should be cached', function (done) {
         const cachiosInstance = cachios.create(axios);
         const time = Date.now();
@@ -69,6 +83,23 @@ describe('cachios', function () {
 
   dataMethods.forEach((method) => {
     describe('helper method ' + method, function() {
+      it('should work with default options', function(done) {
+        const cachiosInstance = cachios.create(axios);
+        const url = 'http://localhost/fake-url';
+        const postData = {
+          stuff: 'yes',
+        };
+
+        cachiosInstance[method](url, postData).then(() => { done(); });
+
+        moxios.wait(function() {
+          moxios.requests.mostRecent().respondWith({
+            status: 200,
+            response: {},
+          });
+        });
+      });
+
       it('should be cached', function (done) {
         const cachiosInstance = cachios.create(axios);
         const time = Date.now();
@@ -102,6 +133,6 @@ describe('cachios', function () {
         });
       });
     });
-    
+
   });
 });
