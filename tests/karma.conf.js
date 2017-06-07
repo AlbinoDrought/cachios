@@ -4,6 +4,7 @@
 //   https://github.com/webpack/karma-webpack
 
 var webpackConfig = require('../build/webpack.test.conf')
+var path = require('path');
 
 module.exports = function (config) {
   config.set({
@@ -18,6 +19,7 @@ module.exports = function (config) {
       '../node_modules/babel-polyfill/dist/polyfill.js',
       './index.js'
     ],
+    // logLevel: config.LOG_DEBUG,
     preprocessors: {
       './index.js': ['webpack', 'sourcemap']
     },
@@ -26,7 +28,7 @@ module.exports = function (config) {
       noInfo: true
     },
     coverageReporter: {
-      dir: './coverage',
+      dir: path.resolve(__dirname, './coverage'),
       reporters: [
         { type: 'lcov', subdir: '.' },
         { type: 'text-summary' }
