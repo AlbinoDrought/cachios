@@ -6,12 +6,15 @@ module.exports = {
   output: {
     filename: 'index.js',
     path: path.resolve(__dirname, 'dist'),
+    library: 'cachios',
+    libraryTarget: 'umd',
   },
   module: {
     loaders: [
       {
         test: /\.js$/,
         loader: 'babel-loader',
+        exclude: /node_modules/,
         query: {
           presets: ['es2015'],
         },
