@@ -1,25 +1,14 @@
 const path = require('path');
 const webpack = require('webpack');
+const merge = require('webpack-merge');
 
-module.exports = {
-  entry: './src/index.js',
+const baseWebpackConfig = require('./webpack.base.conf');
+
+const webpackConfig = merge(baseWebpackConfig, {
   output: {
-    filename: 'index.js',
     path: path.resolve(__dirname, 'dist'),
     library: 'cachios',
     libraryTarget: 'umd',
-  },
-  module: {
-    loaders: [
-      {
-        test: /\.js$/,
-        loader: 'babel-loader',
-        exclude: /node_modules/,
-        query: {
-          presets: ['es2015'],
-        },
-      },
-    ],
   },
   plugins: [
     new webpack.optimize.UglifyJsPlugin({
@@ -31,8 +20,6 @@ module.exports = {
       },
     }),
   ],
-  stats: {
-    colors: true,
-  },
-  devtool: 'source-map',
-};
+});
+
+module.exports = webpackConfig;
