@@ -5,7 +5,7 @@ const chalk = require('chalk');
 const webpack = require('webpack');
 const webpackConfig = require('./webpack.prod.conf.js');
 
-const distPath = './dist';
+const distPath = '../dist';
 
 const spinner = ora('building cachios...');
 spinner.start();
