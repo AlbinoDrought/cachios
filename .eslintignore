@@ -1,2 +1,2 @@
-gulpfile.js
-test/*.js
+build/*.js
+tests/*.js

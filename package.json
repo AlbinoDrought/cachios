@@ -1,10 +1,11 @@
 {
   "name": "cachios",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "Simple axios cache wrapper using node-cache",
-  "main": "src/index.js",
+  "main": "dist/index.js",
   "scripts": {
-    "test": "karma start karma.conf.js"
+    "build": "node ./build/build.js",
+    "test": "cross-env BABEL_ENV=test karma start ./tests/karma.conf.js --single-run"
   },
   "repository": {
     "type": "git",
@@ -27,24 +28,32 @@
   },
   "devDependencies": {
     "assert": "^1.4.1",
+    "babel-core": "^6.24.1",
     "babel-eslint": "^7.2.3",
-    "browserify": "^14.4.0",
+    "babel-loader": "^7.0.0",
+    "babel-plugin-istanbul": "^4.1.4",
+    "babel-polyfill": "^6.23.0",
+    "babel-preset-es2015": "^6.24.1",
+    "chalk": "^1.1.3",
+    "cross-env": "^5.0.0",
     "eslint": "^3.19.0",
     "eslint-config-airbnb-base": "^11.2.0",
     "eslint-plugin-import": "^2.3.0",
-    "gulp": "^3.9.1",
-    "gulp-browserify": "^0.5.1",
-    "gulp-eslint": "^3.0.1",
-    "gulp-mocha": "^4.3.1",
-    "gulp-rename": "^1.2.2",
-    "gulp-uglify": "^3.0.0",
     "karma": "^1.7.0",
     "karma-chrome-launcher": "^2.1.1",
+    "karma-coverage": "^1.1.1",
     "karma-firefox-launcher": "^1.0.1",
     "karma-mocha": "^1.3.0",
     "karma-phantomjs-launcher": "^1.0.4",
+    "karma-sourcemap-loader": "^0.3.7",
+    "karma-spec-reporter": "0.0.31",
+    "karma-webpack": "^2.0.3",
     "mocha": "^3.4.2",
     "moxios": "^0.4.0",
-    "phantomjs": "^2.1.7"
+    "ora": "^1.2.0",
+    "phantomjs-prebuilt": "^2.1.14",
+    "rimraf": "^2.6.1",
+    "webpack": "^2.6.1",
+    "webpack-merge": "^4.1.0"
   }
 }
