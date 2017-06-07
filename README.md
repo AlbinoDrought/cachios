@@ -2,7 +2,7 @@
 
 [![Dependency Status](https://david-dm.org/albinodrought/cachios.svg)](https://david-dm.org/albinodrought/cachios)
 [![npm version](https://badge.fury.io/js/cachios.svg)](https://badge.fury.io/js/cachios)
-[![Travis](https://img.shields.io/travis/rust-lang/rust.svg)](https://travis-ci.org/AlbinoDrought/cachios)
+[![Build Status](https://travis-ci.org/AlbinoDrought/cachios.svg?branch=master)](https://travis-ci.org/AlbinoDrought/cachios)
 
 [![NPM](https://nodei.co/npm/cachios.png)](https://nodei.co/npm/cachios/)
 
@@ -114,7 +114,7 @@ const axios = require('axios');
 
 // configure `node-cache` to keep cache forever!
 const cachiosInstance = cachios.create(axios, {
-  stdTTL: 0, 
+  stdTTL: 0,
   checkperiod: 0,
 });
 ```
