@@ -1,7 +1,8 @@
+import cachios from './../src';
+
 const assert = require('assert');
 const axios = require('axios');
 const moxios = require('moxios');
-const cachios = require('./../src');
 
 const datalessMethods = [
   'delete',
