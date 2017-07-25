@@ -1,9 +1,10 @@
 {
   "name": "cachios",
+  "private": true,
   "version": "1.0.6",
   "description": "Simple axios cache wrapper using node-cache",
   "main": "index.js",
-  "hsnext:main": "index.es.js",
+  "jsnext:main": "index.es.js",
   "scripts": {
     "build": "node build/build.js",
     "test": "cross-env BABEL_ENV=test karma start ./tests/karma.conf.js --single-run"
