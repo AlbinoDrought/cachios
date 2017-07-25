@@ -1,6 +1,6 @@
 {
   "name": "cachios",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "description": "Simple axios cache wrapper using node-cache",
   "main": "index.js",
   "hsnext:main": "index.es.js",
