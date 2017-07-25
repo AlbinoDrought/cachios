@@ -1,7 +1,7 @@
+import extendPrototype from './extendPrototype';
+
 const hash = require('object-hash');
 const NodeCache = require('node-cache');
-
-const extendPrototype = require('./extendPrototype');
 
 function defaultCacheIdentifer(config) {
   return {
@@ -64,4 +64,4 @@ Cachios.prototype.request = function request(config) {
 
 extendPrototype(Cachios.prototype);
 
-module.exports = Cachios;
+export default Cachios;

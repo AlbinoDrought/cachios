@@ -1,6 +1,6 @@
-const axios = require('axios');
+import Cachios from './cachios';
 
-const Cachios = require('./cachios');
+const axios = require('axios');
 
 const instance = new Cachios(axios);
 
@@ -9,5 +9,4 @@ instance.create = function create(axiosInstance, nodeCacheConf) {
   return new Cachios(axiosInstance, nodeCacheConf);
 };
 
-module.exports = instance;
-module.exports.default = instance;
+export default instance;

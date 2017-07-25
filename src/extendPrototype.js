@@ -41,4 +41,4 @@ function extendPrototype(cachiosPrototype) {
   });
 }
 
-module.exports = extendPrototype;
+export default extendPrototype;
