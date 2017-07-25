@@ -1,5 +1,6 @@
+import cachios from './../src';
+
 const assert = require('assert');
-const cachios = require('./../src');
 
 describe('cachios.create', function() {
   it('should return an instance of Cachios', function() {
