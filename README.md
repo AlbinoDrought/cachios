@@ -11,7 +11,41 @@ A simple `axios` cache wrapper using `node-cache`.
 
 ---
 
-Cachios is meant to be an easy drop-in for `axios` and adds caching capabilites to the following methods:
+Cachios is meant to be a replacement for the following pattern:
+
+```js
+const axios = require('axios');
+
+const resources = {};
+
+function getResource(id) {
+  if (!resources[id]) {
+    // actually retrieve the resource
+    return axios.get(`/api/thing/${id}`).then((resp) => {
+      // store the resource
+      resources[id] = resp.data;
+      return resp.data;
+    });
+  } else {
+    // return the resource we already have
+    return Promise.resolve(resources[id]);
+  }
+}
+```
+
+With Cachios, this is replaced with:
+
+```js
+const cachios = require('cachios');
+
+function getResource(id) {
+  return cachios.get(`/api/thing/${id}`).then((resp) => {
+    return resp.data;
+  });
+}
+```
+
+The following `axios` methods are supported:
 
 * request
 * get
