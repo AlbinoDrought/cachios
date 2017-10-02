@@ -1,5 +1,7 @@
 # Cachios
 
+[![Greenkeeper badge](https://badges.greenkeeper.io/AlbinoDrought/cachios.svg)](https://greenkeeper.io/)
+
 [![Dependency Status](https://david-dm.org/albinodrought/cachios.svg)](https://david-dm.org/albinodrought/cachios)
 [![npm version](https://badge.fury.io/js/cachios.svg)](https://badge.fury.io/js/cachios)
 [![Build Status](https://travis-ci.org/AlbinoDrought/cachios.svg?branch=master)](https://travis-ci.org/AlbinoDrought/cachios)
