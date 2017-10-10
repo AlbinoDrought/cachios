@@ -154,6 +154,49 @@ const cachiosInstance = cachios.create(axios, {
 });
 ```
 
+### Alternative Cache Implementation
+
+Don't want to use `node-cache`? The `.cache` property can be overridden.
+
+`cachios` expects the cache implementation to work as follows:
+
+```js
+cachios.cache = {
+  /**
+  cacheKey: string
+
+  if a value has been set for this `cacheKey`, return it.
+  otherwise, return a falsey value (undefined, false, null)
+  */
+  get(cacheKey),
+
+  /**
+  cacheKey: string
+  cacheValue: mixed
+  ttl: number|undefined
+
+  store the value `cacheValue` under `cacheKey` for `ttl` seconds.
+  if `ttl` is not set, it is assumed the value is stored forever.
+  */
+  set(cacheKey, cacheValue, ttl),
+}
+```
+
+Example using `lru-cache`:
+
+```js
+const cachios = require('cachios');
+const LRU  = require('lru-cache');
+
+cachios.cache = LRU(500);
+
+cachios.get('http://example.com/') // not cached
+.then(() => cachios.get('http://example.com/')); // cached
+.then(() => {
+  console.log(cachios.cache.itemCount); // 1 item in cache - the first request
+});
+```
+
 ### Custom Response Copier
 
 By default, Cachios uses the following function to trim responses:
