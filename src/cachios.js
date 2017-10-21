@@ -43,7 +43,7 @@ Cachios.prototype.setCachedValue = function setCachedValue(cacheKey, value, ttl)
 };
 
 Cachios.prototype.request = function request(config) {
-  const ttl = config.ttl;
+  const { ttl } = config;
 
   const cacheKey = this.getCacheKey(config);
   const cachedValue = this.getCachedValue(cacheKey);
