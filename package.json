@@ -6,6 +6,7 @@
   "main": "index.js",
   "jsnext:main": "index.es.js",
   "scripts": {
+	"lint": "eslint src",
     "build": "node build/build.js",
     "test": "cross-env BABEL_ENV=test karma start ./tests/karma.conf.js --single-run"
   },
