@@ -37,7 +37,7 @@
   },
   "homepage": "https://github.com/AlbinoDrought/cachios#readme",
   "dependencies": {
-    "axios": "^0.16.1",
+    "axios": "^0.17.0",
     "babel-runtime": "^6.23.0",
     "node-cache": "^4.1.1",
     "object-hash": "^1.1.8"
