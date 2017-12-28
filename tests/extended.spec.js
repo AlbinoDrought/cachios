@@ -17,26 +17,26 @@ const dataMethods = [
   'patch',
 ];
 
-describe('cachios', function () {
-  beforeEach(function () {
+describe('cachios', () => {
+  beforeEach(() => {
     moxios.install(axios);
   });
 
-  afterEach(function () {
+  afterEach(() => {
     moxios.uninstall(axios);
   });
 
   datalessMethods.concat(dataMethods).forEach((method) => {
-    describe('helper method ' + method, function() {
-      it('should exist', function() {
+    describe('helper method ' + method, () => {
+      test('should exist', () => {
         assert.ok(method in cachios);
       });
     });
   });
 
   datalessMethods.forEach((method) => {
-    describe('helper method ' + method, function() {
-      it('should work with default options', function(done) {
+    describe('helper method ' + method, () => {
+      test('should work with default options', done => {
         const cachiosInstance = cachios.create(axios);
         const url = 'http://localhost/fake-url';
 
@@ -50,7 +50,7 @@ describe('cachios', function () {
         });
       });
 
-      it('should be cached', function (done) {
+      test('should be cached', done => {
         const cachiosInstance = cachios.create(axios);
         const time = Date.now();
         const url = 'http://localhost/fake-url';
@@ -83,8 +83,8 @@ describe('cachios', function () {
   });
 
   dataMethods.forEach((method) => {
-    describe('helper method ' + method, function() {
-      it('should work with default options', function(done) {
+    describe('helper method ' + method, () => {
+      test('should work with default options', done => {
         const cachiosInstance = cachios.create(axios);
         const url = 'http://localhost/fake-url';
         const postData = {
@@ -101,7 +101,7 @@ describe('cachios', function () {
         });
       });
 
-      it('should be cached', function (done) {
+      test('should be cached', done => {
         const cachiosInstance = cachios.create(axios);
         const time = Date.now();
         const url = 'http://localhost/fake-url';
