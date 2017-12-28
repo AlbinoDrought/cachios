@@ -28,6 +28,16 @@
       }
     }
   },
+  "jest": {
+    "collectCoverage": true,
+    "collectCoverageFrom": [
+      "src/**/*.js"
+    ],
+    "coverageDirectory": "tests/coverage",
+    "modulePathIgnorePatterns": [
+      "<rootDir>/dist/"
+    ]
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/AlbinoDrought/cachios.git"
