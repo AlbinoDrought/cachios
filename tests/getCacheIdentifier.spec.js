@@ -1,27 +1,27 @@
-import cachios from './../src';
+import cachios from 'cachios';
 
 const assert = require('assert');
 const axios = require('axios');
 const moxios = require('moxios');
 
 describe('cachios.getCacheIdentifier', () => {
-  beforeEach(function () {
+  beforeEach(() => {
     moxios.install(axios);
   });
 
-  afterEach(function () {
+  afterEach(() => {
     moxios.uninstall(axios);
   });
 
-  it('should be set by default', () => {
+  test('should be set by default', () => {
     assert.equal(cachios.getCacheIdentifier === undefined, false);
   });
 
-  it('should work with an empty config', () => {
+  test('should work with an empty config', () => {
     assert.equal(cachios.getCacheIdentifier({}) === undefined, false);
   });
 
-  it('should be used to identify cache', (done) => {
+  test('should be used to identify cache', (done) => {
     const instance = cachios.create(axios);
     const url = 'http://localhost/fake-url';
     const otherUrl = 'http://localhost/even-faker-url';

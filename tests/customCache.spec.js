@@ -1,10 +1,10 @@
-import cachios from './../src';
+import cachios from 'cachios';
 
 const assert = require('assert');
 const sinon = require('sinon');
 
-describe('cachios.cache', function () {
-  it('should call .get with the key', () => {
+describe('cachios.cache', () => {
+  test('should call .get with the key', () => {
     const instance = cachios.create();
     instance.cache = {
       get: sinon.stub().returns(42),
@@ -14,7 +14,7 @@ describe('cachios.cache', function () {
     assert.equal(instance.cache.get.calledWith('answer'), true);
   });
 
-  it('should call .set with (key, value, ttl)', () => {
+  test('should call .set with (key, value, ttl)', () => {
     const instance = cachios.create();
     instance.cache = {
       set: sinon.stub(),
@@ -24,7 +24,7 @@ describe('cachios.cache', function () {
     assert.equal(instance.cache.set.calledWith('answer', 42, 10), true);
   });
 
-  it('should resolve with the cached value returned with .get', (done) => {
+  test('should resolve with the cached value returned with .get', (done) => {
     const instance = cachios.create();
     instance.cache = {
       get: sinon.stub().returns(42),
@@ -37,7 +37,7 @@ describe('cachios.cache', function () {
     .then(() => done());
   });
 
-  it('should cache the response with .set', (done) => {
+  test('should cache the response with .set', (done) => {
     const request = {
       ttl: 1337,
     };

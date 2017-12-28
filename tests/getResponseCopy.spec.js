@@ -1,33 +1,33 @@
-import cachios from './../src';
+import cachios from 'cachios';
 
 const assert = require('assert');
 const axios = require('axios');
 const moxios = require('moxios');
 
 describe('cachios.getResponseCopy', () => {
-  beforeEach(function () {
+  beforeEach(() => {
     moxios.install(axios);
   });
 
-  afterEach(function () {
+  afterEach(() => {
     moxios.uninstall(axios);
   });
 
-  it('should be set by default', () => {
+  test('should be set by default', () => {
     assert.equal(cachios.getResponseCopy === undefined, false);
   });
 
-  it('should work with an empty response', () => {
+  test('should work with an empty response', () => {
     assert.equal(cachios.getResponseCopy({}) === undefined, false);
   });
 
-  it('should be used to copy responses', (done) => {
+  test('should be used to copy responses', (done) => {
     const instance = cachios.create(axios);
     const url = 'http://localhost/fake-url';
 
     instance.getResponseCopy = (resp) => ({
       status: resp.status,
-      answer: 'yes', 
+      answer: 'yes',
     });
 
     instance.get(url)
