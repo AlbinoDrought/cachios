@@ -89,7 +89,7 @@
     "ora": "^1.2.0",
     "request": "^2.83.0",
     "rimraf": "^2.6.1",
-    "rollup": "^0.50.0",
+    "rollup": "^0.51.0",
     "rollup-plugin-babel": "^3.0.2",
     "sinon": "^4.0.1",
     "webpack": "^3.6.0",
