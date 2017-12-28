@@ -1,4 +1,4 @@
-import cachios from './../src';
+import cachios from 'cachios';
 
 const assert = require('assert');
 

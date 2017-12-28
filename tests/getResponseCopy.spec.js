@@ -1,4 +1,4 @@
-import cachios from './../src';
+import cachios from 'cachios';
 
 const assert = require('assert');
 const axios = require('axios');
@@ -27,7 +27,7 @@ describe('cachios.getResponseCopy', () => {
 
     instance.getResponseCopy = (resp) => ({
       status: resp.status,
-      answer: 'yes', 
+      answer: 'yes',
     });
 
     instance.get(url)
