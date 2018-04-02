@@ -1,6 +1,5 @@
 import cachios from 'cachios';
 
-const assert = require('assert');
 const axios = require('axios');
 const moxios = require('moxios');
 
@@ -14,11 +13,11 @@ describe('cachios.getCacheIdentifier', () => {
   });
 
   test('should be set by default', () => {
-    assert.equal(cachios.getCacheIdentifier === undefined, false);
+    expect(cachios.getCacheIdentifier === undefined).toBe(false);
   });
 
   test('should work with an empty config', () => {
-    assert.equal(cachios.getCacheIdentifier({}) === undefined, false);
+    expect(cachios.getCacheIdentifier({}) === undefined).toBe(false);
   });
 
   test('should be used to identify cache', (done) => {

@@ -1,7 +1,5 @@
 import cachios from 'cachios';
 
-const assert = require('assert');
-
 describe('cachios.cache', () => {
   test('should call .get with the key', () => {
     const instance = cachios.create();
@@ -9,8 +7,8 @@ describe('cachios.cache', () => {
       get: jest.fn().mockReturnValue(42),
     };
 
-    assert.equal(instance.getCachedValue('answer'), 42);
-    assert.equal(instance.cache.get.mock.calls[0][0], 'answer');
+    expect(instance.getCachedValue('answer')).toBe(42);
+    expect(instance.cache.get.mock.calls[0][0]).toBe('answer');
   });
 
   test('should call .set with (key, value, ttl)', () => {
@@ -31,7 +29,7 @@ describe('cachios.cache', () => {
 
     instance.request({})
     .then((answer) => {
-      assert.equal(answer, 42);
+      expect(answer).toBe(42);
     })
     .then(() => done());
   });
@@ -61,8 +59,8 @@ describe('cachios.cache', () => {
     instance.request(request)
     .then((resp) => {
       // proper response returned (sanity)
-      assert.equal(resp.status, 200);
-      assert.equal(resp.data.answer, 42);
+      expect(resp.status).toBe(200);
+      expect(resp.data.answer).toBe(42);
     })
     .then(() => {
       // our cache.set func was called with the expected values,

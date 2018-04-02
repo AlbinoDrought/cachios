@@ -1,6 +1,5 @@
 import cachios from 'cachios';
 
-const assert = require('assert');
 const axios = require('axios');
 const moxios = require('moxios');
 
@@ -29,7 +28,7 @@ describe('cachios', () => {
   datalessMethods.concat(dataMethods).forEach((method) => {
     describe('helper method ' + method, () => {
       test('should exist', () => {
-        assert.ok(method in cachios);
+        expect(cachios[method]).toBeDefined();
       });
     });
   });
@@ -72,7 +71,7 @@ describe('cachios', () => {
             promise = promise.then(() => cachiosInstance[method](url, {
               ttl: 60,
             }).then((resp) => {
-              assert.equal(resp.data.time, time);
+              expect(resp.data.time).toBe(time);
             }));
           }
 
@@ -126,7 +125,7 @@ describe('cachios', () => {
             promise = promise.then(() => cachiosInstance[method](url, postData, {
               ttl: 60,
             }).then((resp) => {
-              assert.equal(resp.data.time, time);
+              expect(resp.data.time).toBe(time);
             }));
           }
 

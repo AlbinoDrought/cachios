@@ -68,7 +68,6 @@
     "object-hash": "^1.1.8"
   },
   "devDependencies": {
-    "assert": "^1.4.1",
     "babel-core": "^6.24.1",
     "babel-eslint": "^8.0.1",
     "babel-loader": "^7.0.0",
