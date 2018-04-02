@@ -1,33 +1,32 @@
 import cachios from 'cachios';
 
 const assert = require('assert');
-const sinon = require('sinon');
 
 describe('cachios.cache', () => {
   test('should call .get with the key', () => {
     const instance = cachios.create();
     instance.cache = {
-      get: sinon.stub().returns(42),
+      get: jest.fn().mockReturnValue(42),
     };
 
     assert.equal(instance.getCachedValue('answer'), 42);
-    assert.equal(instance.cache.get.calledWith('answer'), true);
+    assert.equal(instance.cache.get.mock.calls[0][0], 'answer');
   });
 
   test('should call .set with (key, value, ttl)', () => {
     const instance = cachios.create();
     instance.cache = {
-      set: sinon.stub(),
+      set: jest.fn(),
     };
 
     instance.setCachedValue('answer', 42, 10);
-    assert.equal(instance.cache.set.calledWith('answer', 42, 10), true);
+    expect(instance.cache.set.mock.calls[0]).toEqual(['answer', 42, 10]);
   });
 
   test('should resolve with the cached value returned with .get', (done) => {
     const instance = cachios.create();
     instance.cache = {
-      get: sinon.stub().returns(42),
+      get: jest.fn().mockReturnValue(42),
     };
 
     instance.request({})
@@ -50,13 +49,13 @@ describe('cachios.cache', () => {
     };
 
     const fakeAxios = {
-      request: sinon.stub().resolves(response),
+      request: jest.fn().mockReturnValue(Promise.resolve(response)),
     };
 
     const instance = cachios.create(fakeAxios);
     instance.cache = {
       get: () => undefined,
-      set: sinon.stub(),
+      set: jest.fn(),
     };
 
     instance.request(request)
@@ -68,11 +67,11 @@ describe('cachios.cache', () => {
     .then(() => {
       // our cache.set func was called with the expected values,
       // including ttl (pulled from config)
-      assert.equal(instance.cache.set.calledWith(
+      expect(instance.cache.set.mock.calls[0]).toEqual([
         instance.getCacheKey(request),
         instance.getResponseCopy(response),
         request.ttl,
-      ), true);
+      ]);
     })
     .then(() => done());
   });
