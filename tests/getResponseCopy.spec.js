@@ -1,6 +1,5 @@
 import cachios from 'cachios';
 
-const assert = require('assert');
 const axios = require('axios');
 const moxios = require('moxios');
 
@@ -14,11 +13,11 @@ describe('cachios.getResponseCopy', () => {
   });
 
   test('should be set by default', () => {
-    assert.equal(cachios.getResponseCopy === undefined, false);
+    expect(cachios.getResponseCopy).toBeDefined();
   });
 
   test('should work with an empty response', () => {
-    assert.equal(cachios.getResponseCopy({}) === undefined, false);
+    expect(cachios.getResponseCopy({})).toBeDefined();
   });
 
   test('should be used to copy responses', (done) => {
@@ -33,14 +32,14 @@ describe('cachios.getResponseCopy', () => {
     instance.get(url)
     .then((resp) => {
       // this is not a copy
-      assert.equal(resp.status, 200);
-      assert.equal(resp.data.foo, 'bar');
+      expect(resp.status).toBe(200);
+      expect(resp.data.foo).toBe('bar');
     })
     .then(() => instance.get(url))
     .then((resp) => {
       // this is a copy
-      assert.equal(resp.status, 200);
-      assert.equal(resp.answer, 'yes');
+      expect(resp.status).toBe(200);
+      expect(resp.answer).toBe('yes');
     })
     .then(() => done());
 
