@@ -1,4 +1,4 @@
-import cachios from 'cachios';
+const cachios = require('./../src');
 
 describe('cachios.cache', () => {
   test('should call .get with the key', () => {

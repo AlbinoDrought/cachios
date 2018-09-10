@@ -1,4 +1,4 @@
-import cachios from 'cachios';
+const cachios = require('./../src');
 
 describe('cachios.create', () => {
   test('should return an instance of Cachios', () => {
