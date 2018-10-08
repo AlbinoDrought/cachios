@@ -1,44 +1,54 @@
 // boilerplate helper method code inspired by axios/lib/core/Axios.js ;)
-const datalessMethods = [
+var datalessMethods = [
   'delete',
   'get',
   'head',
   'options',
 ];
 
-const dataMethods = [
+var dataMethods = [
   'post',
   'put',
   'patch',
 ];
 
+function aliasDatalessMethod(method) {
+  return function (url, config) {
+    var mergedRequest = config || {};
+
+    mergedRequest.url = url;
+    mergedRequest.method = method;
+
+    return this.request(mergedRequest);
+  };
+};
+
+function aliasDataMethod(method) {
+  return function (url, data, config) {
+    var mergedRequest = config || {};
+
+    mergedRequest.url = url;
+    mergedRequest.method = method;
+    mergedRequest.data = data;
+
+    return this.request(mergedRequest);
+  };
+};
+
 function extendPrototype(cachiosPrototype) {
-  datalessMethods.forEach((method) => {
-    cachiosPrototype[method] = function aliasDatalessMethod(url, config) {
-      const baseRequest = {
-        url,
-        method,
-      };
+  // these methods take two params (no `data`)
+  for (var i = 0; i < datalessMethods.length; i += 1) {
+    var method = datalessMethods[i];
 
-      const mergedRequest = Object.assign(config || {}, baseRequest);
+    cachiosPrototype[method] = aliasDatalessMethod(method);
+  }
 
-      return this.request(mergedRequest);
-    };
-  });
+  // these methods take three params and have a different signature
+  for (var i = 0; i < dataMethods.length; i += 1) {
+    var method = dataMethods[i];
 
-  dataMethods.forEach((method) => {
-    cachiosPrototype[method] = function aliasDataMethod(url, data, config) {
-      const baseRequest = {
-        url,
-        method,
-        data,
-      };
-
-      const mergedRequest = Object.assign(config || {}, baseRequest);
-
-      return this.request(mergedRequest);
-    };
-  });
+    cachiosPrototype[method] = aliasDataMethod(method);
+  }
 }
 
-export default extendPrototype;
+module.exports = extendPrototype;

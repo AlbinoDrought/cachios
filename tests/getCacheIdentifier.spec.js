@@ -1,4 +1,4 @@
-import cachios from 'cachios';
+const cachios = require('./../src');
 
 const axios = require('axios');
 const moxios = require('moxios');

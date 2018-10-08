@@ -1,12 +1,11 @@
-import Cachios from './cachios';
+var axios = require('axios');
+var Cachios = require('./cachios');
 
-const axios = require('axios');
-
-const instance = new Cachios(axios);
+var instance = new Cachios(axios);
 
 // allow for similar axios syntax
 instance.create = function create(axiosInstance, nodeCacheConf) {
   return new Cachios(axiosInstance, nodeCacheConf);
 };
 
-export default instance;
+module.exports = instance;

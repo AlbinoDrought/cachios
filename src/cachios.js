@@ -1,7 +1,6 @@
-import extendPrototype from './extendPrototype';
-
-const hash = require('object-hash');
-const NodeCache = require('node-cache');
+var hash = require('object-hash');
+var NodeCache = require('node-cache');
+var extendPrototype = require('./extendPrototype');
 
 function defaultCacheIdentifer(config) {
   return {
@@ -30,38 +29,36 @@ function Cachios(axiosInstance, nodeCacheConf) {
   this.getResponseCopy = defaultResponseCopier;
 }
 
-Cachios.prototype.getCacheKey = function getCacheKey(config) {
+Cachios.prototype.getCacheKey = function (config) {
   return hash(this.getCacheIdentifier(config));
 };
 
-Cachios.prototype.getCachedValue = function getCachedValue(cacheKey) {
+Cachios.prototype.getCachedValue = function (cacheKey) {
   return this.cache.get(cacheKey);
 };
 
-Cachios.prototype.setCachedValue = function setCachedValue(cacheKey, value, ttl) {
+Cachios.prototype.setCachedValue = function (cacheKey, value, ttl) {
   return this.cache.set(cacheKey, value, ttl);
 };
 
 Cachios.prototype.request = function request(config) {
-  const { ttl } = config;
+  var ttl = config.ttl;
+  var cacheKey = this.getCacheKey(config);
+  var cachedValue = this.getCachedValue(cacheKey);
 
-  const cacheKey = this.getCacheKey(config);
-  const cachedValue = this.getCachedValue(cacheKey);
-
-  let promise;
-
-  if (cachedValue === undefined) {
-    promise = this.axiosInstance.request(config).then((resp) => {
-      this.setCachedValue(cacheKey, this.getResponseCopy(resp), ttl);
-      return resp;
-    });
-  } else {
-    promise = Promise.resolve(cachedValue);
+  // if we find a cached value, return it immediately
+  if (cachedValue !== undefined) {
+    return Promise.resolve(cachedValue);
   }
 
-  return promise;
+  // otherwise, send a real request and cache the value for later
+  var me = this;
+  return this.axiosInstance.request(config).then(function (resp) {
+    me.setCachedValue(cacheKey, me.getResponseCopy(resp), ttl);
+    return resp;
+  });
 };
 
 extendPrototype(Cachios.prototype);
 
-export default Cachios;
+module.exports = Cachios;
