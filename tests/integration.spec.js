@@ -40,34 +40,53 @@ describe('cachios - integration', () => {
     'delete',
   ];
 
+  const makeHitCounter = (instance, method, base) => {
+    const hitCounter = {
+      hits: 0,
+      method,
+      endpoint: '/foo',
+      body: 'foobar',
+    };
+
+    hitCounter.url = () => `${base}${hitCounter.endpoint}`;
+
+    instance[method](hitCounter.endpoint, (req, res) => {
+      res.type('text');
+      res.send(hitCounter.body);
+      hitCounter.hits += 1;
+    });
+
+    return hitCounter;
+  };
+
+  // hit our test url and check if we hit it or if it was returned from cache
+  const hitAndCheck = (hitCounter, cachiosInstance, expectedHits) => {
+    const url = hitCounter.url();
+    return Promise.resolve()
+      .then(() => cachiosInstance[hitCounter.method](url))
+      .then((resp) => {
+        // make sure we receive the expected text
+        expect(resp.data).toBe(hitCounter.body);
+        // make sure our hit counter matches up with our expected amount of hits
+        expect(hitCounter.hits).toBe(expectedHits);
+      });
+  };
+
   methods.forEach((method) => {
     test(`should work in a somewhat-real environment: ${method}`, () => {
-      let hits = 0;
-
-      server[method]('/foo', (req, res) => {
-        res.type('text');
-        res.send('foobar');
-        hits += 1;
-      });
-
-      const hitAndCheck = (expectedHits) => Promise.resolve()
-        .then(() => cachios[method](`${BASE}/foo`))
-        .then((resp) => {
-          expect(resp.data).toBe('foobar');
-          expect(hits).toBe(expectedHits);
-        });
+      const hitCounter = makeHitCounter(server, method, BASE);
 
       let promise = Promise.resolve();
 
       for (let i = 0; i < HITS_TO_PERFORM; i += 1) {
-        promise = promise.then(() => hitAndCheck(1));
+        promise = promise.then(() => hitAndCheck(hitCounter, cachios, 1));
       }
 
       // clear cache and hit again, expecting our hits counter to increment.
       // (ensures hit counter at least works a little)
       promise = promise
       .then(() => cachios.cache.flushAll())
-      .then(() => hitAndCheck(2));
+      .then(() => hitAndCheck(hitCounter, cachios, 2));
 
       return promise;
     });
