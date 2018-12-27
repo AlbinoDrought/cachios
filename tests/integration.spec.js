@@ -1,9 +1,11 @@
-const cachios = require('./../src');
+const globalCachios = require('./../src');
+const globalAxios = require('axios');
 
 const express = require('express');
 const axios = require('axios');
 
-const HITS_TO_PERFORM = 100;
+const HITS_TO_PERFORM = 25;
+const SIMULTANEOUS_HITS = 4;
 const HOST = '127.0.0.1';
 const PORT = 11888;
 const BASE = `http://${HOST}:${PORT}`;
@@ -11,6 +13,7 @@ const BASE = `http://${HOST}:${PORT}`;
 describe('cachios - integration', () => {
   let server;
   let socket;
+  let cachios;
 
   beforeEach((done) => {
     server = express();
@@ -20,6 +23,7 @@ describe('cachios - integration', () => {
       next();
     });
     socket = server.listen(PORT, done);
+    cachios = globalCachios.create(globalAxios);
   });
 
   afterEach((done) => {
@@ -80,6 +84,36 @@ describe('cachios - integration', () => {
 
       for (let i = 0; i < HITS_TO_PERFORM; i += 1) {
         promise = promise.then(() => hitAndCheck(hitCounter, cachios, 1));
+      }
+
+      // clear cache and hit again, expecting our hits counter to increment.
+      // (ensures hit counter at least works a little)
+      promise = promise
+      .then(() => cachios.cache.flushAll())
+      .then(() => hitAndCheck(hitCounter, cachios, 2));
+
+      return promise;
+    });
+
+    /*
+      # Deduplicate simultaneous requests #44
+
+      Hi
+      Currently, if multiple axios requests are triggered on the same resource in the same event loop, it will trigger multiple http requests
+      It would be great if that could be deduplicated
+    */
+    test(`should work when sending simultaneous requests: ${method}`, () => {
+      const hitCounter = makeHitCounter(server, method, BASE);
+
+      let promise = Promise.resolve();
+
+      for (let i = 0; i < HITS_TO_PERFORM; i += 1) {
+        // send simultaneous hits
+        const hits = [];
+        for (let o = 0; o < SIMULTANEOUS_HITS; o += 1) {
+          hits.push(hitAndCheck(hitCounter, cachios, 1));
+        }
+        promise = promise.then(() => Promise.all(hits));
       }
 
       // clear cache and hit again, expecting our hits counter to increment.
