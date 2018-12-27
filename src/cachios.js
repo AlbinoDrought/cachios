@@ -24,6 +24,8 @@ function Cachios(axiosInstance, nodeCacheConf) {
     stdTTL: 30,
     checkperiod: 120,
   });
+  // requests that have been fired but have not yet been completed
+  this.stagingPromises = {};
 
   this.getCacheIdentifier = defaultCacheIdentifer;
   this.getResponseCopy = defaultResponseCopier;
@@ -51,12 +53,35 @@ Cachios.prototype.request = function request(config) {
     return Promise.resolve(cachedValue);
   }
 
+  // if we find a staging promise (a request that has not yet completed, so it is not yet in cache),
+  // return it.
+  if (this.stagingPromises[cacheKey]) {
+    return this.stagingPromises[cacheKey];
+  }
+
   // otherwise, send a real request and cache the value for later
   var me = this;
-  return this.axiosInstance.request(config).then(function (resp) {
+  var pendingPromise = this.axiosInstance.request(config);
+
+  // store the promise in stagingPromises so it can be used before completing
+  // we don't store it in the cache immediately because:
+  // - we don't want it in the cache if the request fails
+  // - our cache backend may not support promises
+  this.stagingPromises[cacheKey] = pendingPromise;
+
+  // once the request successfully copmletes, store it in cache
+  pendingPromise.then(function (resp) {
     me.setCachedValue(cacheKey, me.getResponseCopy(resp), ttl);
-    return resp;
   });
+
+  // always delete the staging promise once the request is complete
+  // (finished or failed)
+  pendingPromise.catch(function () {}).then(function () {
+    delete me.stagingPromises[cacheKey];
+  });
+
+  // return the original promise
+  return pendingPromise;
 };
 
 extendPrototype(Cachios.prototype);
