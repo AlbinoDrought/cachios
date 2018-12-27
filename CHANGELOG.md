@@ -1,3 +1,7 @@
+# 2.1.0
+
+Deduplicates simultaneous identical requests: https://github.com/AlbinoDrought/cachios/issues/44
+
 # 2.0.0
 
 This release does not change the public interface to `cachios`, but does vastly change the build process and removes some polyfills.
