@@ -1,6 +1,6 @@
 {
   "name": "cachios",
-  "version": "2.1.0",
+  "version": "2.1.1",
   "description": "Simple axios cache wrapper using node-cache",
   "main": "src/index.js",
   "scripts": {
@@ -31,13 +31,13 @@
   "homepage": "https://github.com/AlbinoDrought/cachios#readme",
   "dependencies": {
     "axios": "^0.18.0",
-    "node-cache": "^4.1.1",
+    "node-cache": "^4.2.0",
     "object-hash": "^1.1.8"
   },
   "devDependencies": {
     "coveralls": "^3.0.0",
     "express": "^4.16.2",
-    "jest": "^22.0.4",
+    "jest": "^24.5.0",
     "moxios": "^0.4.0"
   }
 }
