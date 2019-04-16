@@ -20,6 +20,10 @@ describe('cachios.getResponseCopy', () => {
     expect(cachios.getResponseCopy({})).toBeDefined();
   });
 
+  test('should work with an null response', () => {
+    expect(cachios.getResponseCopy(null)).toBeDefined();
+  });
+
   test('should be used to copy responses', (done) => {
     const instance = cachios.create(axios);
     const url = 'http://localhost/fake-url';

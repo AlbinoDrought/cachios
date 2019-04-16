@@ -20,6 +20,10 @@ describe('cachios.getCacheIdentifier', () => {
     expect(cachios.getCacheIdentifier({}) === undefined).toBe(false);
   });
 
+  test('should work with an null response', () => {
+    expect(cachios.getCacheIdentifier(null)).toBeDefined();
+  });
+
   test('should be used to identify cache', (done) => {
     const instance = cachios.create(axios);
     const url = 'http://localhost/fake-url';
