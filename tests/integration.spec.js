@@ -95,6 +95,43 @@ describe('cachios - integration', () => {
       return promise;
     });
 
+    test(`should bypass cache when \`force\` is set: ${method}`, () => {
+      const hitCounter = makeHitCounter(server, method, BASE);
+
+      let promise = Promise.resolve();
+
+      for (let i = 0; i < HITS_TO_PERFORM; i += 1) {
+        promise = promise
+        .then(() => cachios.request({
+          method: method,
+          url: hitCounter.url(),
+        })).then(() => {
+          expect(hitCounter.hits).toBe(1);
+        });
+      }
+
+      // set force = true to bypass cache
+      promise = promise
+      .then(() => cachios.request({
+        method: method,
+        url: hitCounter.url(),
+        force: true,
+      })).then(() => {
+        expect(hitCounter.hits).toBe(2);
+      });
+
+      // unforced request after forced request should still receive cached response
+      promise = promise
+      .then(() => cachios.request({
+        method: method,
+        url: hitCounter.url(),
+      })).then(() => {
+        expect(hitCounter.hits).toBe(2);
+      });
+
+      return promise;
+    });
+
     /*
       # Deduplicate simultaneous requests #44
 

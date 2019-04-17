@@ -51,11 +51,12 @@ Cachios.prototype.setCachedValue = function (cacheKey, value, ttl) {
 
 Cachios.prototype.request = function request(config) {
   var ttl = config.ttl;
+  var force = config.force || false;
   var cacheKey = this.getCacheKey(config);
   var cachedValue = this.getCachedValue(cacheKey);
 
   // if we find a cached value, return it immediately
-  if (cachedValue !== undefined) {
+  if (cachedValue !== undefined && force !== true) {
     return Promise.resolve(cachedValue);
   }
 
@@ -78,14 +79,11 @@ Cachios.prototype.request = function request(config) {
   // once the request successfully copmletes, store it in cache
   pendingPromise.then(function (resp) {
     me.setCachedValue(cacheKey, me.getResponseCopy(resp), ttl);
-  });
-
-  // always delete the staging promise once the request is complete
-  // (finished or failed)
-  pendingPromise.catch(function () {}).then(function () {
+  }).catch(function () {}).then(function () {
+    // always delete the staging promise once the request is complete
+    // (finished or failed)
     delete me.stagingPromises[cacheKey];
   });
-
   // return the original promise
   return pendingPromise;
 };
