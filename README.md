@@ -124,6 +124,21 @@ cachios.post('url', postData, {
 });
 ```
 
+### Force Ignore Cache
+
+To ignore existing cache items and force a fresh request to go through, use `force: true`:
+
+```js
+const cachios = require('cachios');
+
+cachios.get('url'); // cache 'url'
+
+// ignore and update cache for 'url' by using `force: true`
+cachios.get('url', {
+  force: true,
+});
+```
+
 ### Custom Axios Instance
 
 Cachios also supports using a pre-configured `axios` instance:
