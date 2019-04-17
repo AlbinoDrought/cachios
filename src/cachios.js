@@ -72,14 +72,11 @@ Cachios.prototype.request = function request(config) {
   // once the request successfully copmletes, store it in cache
   pendingPromise.then(function (resp) {
     me.setCachedValue(cacheKey, me.getResponseCopy(resp), ttl);
-  });
-
-  // always delete the staging promise once the request is complete
-  // (finished or failed)
-  pendingPromise.catch(function () {}).then(function () {
+  }).catch(function () {}).then(function () {
+    // always delete the staging promise once the request is complete
+    // (finished or failed)
     delete me.stagingPromises[cacheKey];
   });
-
   // return the original promise
   return pendingPromise;
 };
