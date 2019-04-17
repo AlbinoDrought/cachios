@@ -3,9 +3,6 @@ var NodeCache = require('node-cache');
 var extendPrototype = require('./extendPrototype');
 
 function defaultCacheIdentifer(config) {
-  if (!config) {
-    config = {};
-  }
   return {
     method: config.method,
     url: config.url,

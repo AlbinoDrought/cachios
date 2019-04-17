@@ -14,7 +14,11 @@ describe('cachios cancelling', () => {
 
   test('nothing should explode if a request is cancelled', (done) => {
     jest.useFakeTimers();
-
+    axios.interceptors.response.use( (response) => {
+      return response
+    }, (error) => {
+      return Promise.reject(error);
+    })
     const cachiosInstance = cachios.create(axios);
     const url = 'http://localhost/fake-url';
 
