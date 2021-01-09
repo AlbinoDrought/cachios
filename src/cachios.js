@@ -46,6 +46,7 @@ Cachios.prototype.setCachedValue = function (cacheKey, value, ttl) {
 Cachios.prototype.request = function request(config) {
   var ttl = config.ttl;
   var force = config.force || false;
+  var cacheablePromise = !config.cancelToken; // refuse to cache cancellable requests until their promise has resolved
   var cacheKey = this.getCacheKey(config);
   var cachedValue = this.getCachedValue(cacheKey);
 
@@ -56,7 +57,7 @@ Cachios.prototype.request = function request(config) {
 
   // if we find a staging promise (a request that has not yet completed, so it is not yet in cache),
   // return it.
-  if (this.stagingPromises[cacheKey]) {
+  if (cacheablePromise && this.stagingPromises[cacheKey]) {
     return this.stagingPromises[cacheKey];
   }
 
@@ -68,9 +69,11 @@ Cachios.prototype.request = function request(config) {
   // we don't store it in the cache immediately because:
   // - we don't want it in the cache if the request fails
   // - our cache backend may not support promises
-  this.stagingPromises[cacheKey] = pendingPromise;
+  if (cacheablePromise) {
+    this.stagingPromises[cacheKey] = pendingPromise;
+  }
 
-  // once the request successfully copmletes, store it in cache
+  // once the request successfully completes, store it in cache
   pendingPromise.then(function (resp) {
     me.setCachedValue(cacheKey, me.getResponseCopy(resp), ttl);
   }).catch(function () {}).then(function () {
