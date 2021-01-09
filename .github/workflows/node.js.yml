@@ -26,6 +26,28 @@ jobs:
       uses: actions/setup-node@v1
       with:
         node-version: ${{ matrix.node-version }}
+
     - run: npm ci
-    - run: npm install "axios@${{ matrix.axios-version }}" "node-cache@${{ matrix.node-cache-version }}" --no-save # force installation of a supported axios and node-cache version
+    - name: Install Supported Not-Always-Latest Dependencies
+      run: npm install "axios@${{ matrix.axios-version }}" "node-cache@${{ matrix.node-cache-version }}" --no-save
+
     - run: npm test
+
+    - name: Coveralls Parallel
+      uses: coverallsapp/github-action@master
+      with:
+        github-token: ${{ secrets.github_token }}
+        path-to-lcov: tests/coverage/lcov.info
+        flag-name: run-${{ matrix.node_version }}-${{ matrix.axios-version}}-${{ matrix.node-cache-version }}
+        parallel: true
+  
+  finish:
+    needs: test
+    runs-on: ubuntu-latest
+    steps:
+    - name: Coveralls Finished
+      uses: coverallsapp/github-action@master
+      with:
+        github-token: ${{ secrets.github_token }}
+        path-to-lcov: tests/coverage/lcov.info
+        parallel-finished: true
