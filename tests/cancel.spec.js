@@ -12,7 +12,7 @@ describe('cachios cancelling', () => {
     moxios.uninstall(axios);
   });
 
-  test('nothing should explode if a request is cancelled', (done) => {
+  test('nothing should explode if a request is cancelled', async () => {
     jest.useFakeTimers();
 
     const cachiosInstance = cachios.create(axios);
@@ -21,25 +21,20 @@ describe('cachios cancelling', () => {
     const CancelToken = axios.CancelToken;
     const source = CancelToken.source();
 
-    cachiosInstance.get(url, {
+    const cachiosPromise = cachiosInstance.get(url, {
       cancelToken: source.token,
-    }).then((resp) => {
+    });
+    
+    source.cancel('test');
+
+    try {
+      await cachiosPromise;
       // this should never happen!
-      expect(false).toBe(true);
-      done();
-    }).catch((ex) => {
+      throw new Error('Promise should not successfully resolve, we cancelled it!');
+    } catch (ex) {
       // we should receive the normal axios cancel exception here
       // (and no "null" issues)
       expect(ex.message).toBe('test');
-      done();
-    });
-
-    setTimeout(() => {
-      source.cancel('test');
-    }, 10);
-    jest.runOnlyPendingTimers();
-
-    // intentionally never resolve moxios request
-    // we want to cancel the request before it finishes.
+    }
   });
 });
