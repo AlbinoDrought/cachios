@@ -22,18 +22,12 @@ describe('cachios - integration', () => {
       res.header('Access-Control-Allow-Headers', 'X-Requested-With');
       next();
     });
-    socket = server.listen(PORT, done);
     cachios = globalCachios.create(globalAxios);
+    socket = server.listen(PORT, done);
   });
 
   afterEach((done) => {
-    if (!server || !socket) {
-      return done();
-    }
-
     socket.close(done);
-    server = undefined;
-    socket = undefined;
   });
 
   const methods = [
@@ -64,72 +58,56 @@ describe('cachios - integration', () => {
   };
 
   // hit our test url and check if we hit it or if it was returned from cache
-  const hitAndCheck = (hitCounter, cachiosInstance, expectedHits) => {
+  const hitAndCheck = async (hitCounter, cachiosInstance, expectedHits) => {
     const url = hitCounter.url();
-    return Promise.resolve()
-      .then(() => cachiosInstance[hitCounter.method](url))
-      .then((resp) => {
-        // make sure we receive the expected text
-        expect(resp.data).toBe(hitCounter.body);
-        // make sure our hit counter matches up with our expected amount of hits
-        expect(hitCounter.hits).toBe(expectedHits);
-      });
+
+    const resp = await cachiosInstance[hitCounter.method](url);
+    // make sure we receive the expected text
+    expect(resp.data).toBe(hitCounter.body);
+    // make sure our hit counter matches up with our expected amount of hits
+    expect(hitCounter.hits).toBe(expectedHits);
   };
 
   methods.forEach((method) => {
-    test(`should work in a somewhat-real environment: ${method}`, () => {
+    test(`should work in a somewhat-real environment: ${method}`, async () => {
       const hitCounter = makeHitCounter(server, method, BASE);
 
-      let promise = Promise.resolve();
-
       for (let i = 0; i < HITS_TO_PERFORM; i += 1) {
-        promise = promise.then(() => hitAndCheck(hitCounter, cachios, 1));
+        await hitAndCheck(hitCounter, cachios, 1);
       }
 
       // clear cache and hit again, expecting our hits counter to increment.
       // (ensures hit counter at least works a little)
-      promise = promise
-      .then(() => cachios.cache.flushAll())
-      .then(() => hitAndCheck(hitCounter, cachios, 2));
-
-      return promise;
+      await cachios.cache.flushAll();
+      await hitAndCheck(hitCounter, cachios, 2);
     });
 
-    test(`should bypass cache when \`force\` is set: ${method}`, () => {
+    test(`should bypass cache when \`force\` is set: ${method}`, async () => {
       const hitCounter = makeHitCounter(server, method, BASE);
 
-      let promise = Promise.resolve();
-
       for (let i = 0; i < HITS_TO_PERFORM; i += 1) {
-        promise = promise
-        .then(() => cachios.request({
+        await cachios.request({
           method: method,
           url: hitCounter.url(),
-        })).then(() => {
-          expect(hitCounter.hits).toBe(1);
         });
+        expect(hitCounter.hits).toBe(1);
       }
 
       // set force = true to bypass cache
-      promise = promise
-      .then(() => cachios.request({
+      await cachios.request({
         method: method,
         url: hitCounter.url(),
         force: true,
-      })).then(() => {
-        expect(hitCounter.hits).toBe(2);
-      });
+      })
+
+      expect(hitCounter.hits).toBe(2);
 
       // unforced request after forced request should still receive cached response
-      promise = promise
-      .then(() => cachios.request({
+      await cachios.request({
         method: method,
         url: hitCounter.url(),
-      })).then(() => {
-        expect(hitCounter.hits).toBe(2);
-      });
-
-      return promise;
+      })
+      expect(hitCounter.hits).toBe(2);
     });
 
     /*
@@ -139,10 +117,8 @@ describe('cachios - integration', () => {
       Currently, if multiple axios requests are triggered on the same resource in the same event loop, it will trigger multiple http requests
       It would be great if that could be deduplicated
     */
-    test(`should work when sending simultaneous requests: ${method}`, () => {
+    test(`should work when sending simultaneous requests: ${method}`, async () => {
       const hitCounter = makeHitCounter(server, method, BASE);
-
-      let promise = Promise.resolve();
 
       for (let i = 0; i < HITS_TO_PERFORM; i += 1) {
         // send simultaneous hits
@@ -150,16 +126,13 @@ describe('cachios - integration', () => {
         for (let o = 0; o < SIMULTANEOUS_HITS; o += 1) {
           hits.push(hitAndCheck(hitCounter, cachios, 1));
         }
-        promise = promise.then(() => Promise.all(hits));
+        await Promise.all(hits);
       }
 
       // clear cache and hit again, expecting our hits counter to increment.
       // (ensures hit counter at least works a little)
-      promise = promise
-      .then(() => cachios.cache.flushAll())
-      .then(() => hitAndCheck(hitCounter, cachios, 2));
-
-      return promise;
+      await cachios.cache.flushAll();
+      await hitAndCheck(hitCounter, cachios, 2);
     });
   });
 });
