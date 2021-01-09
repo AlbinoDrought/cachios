@@ -19,7 +19,7 @@ describe('cachios cancelling', () => {
     const url = 'http://localhost/fake-url';
 
     const CancelToken = axios.CancelToken;
-    const source = CancelToken.source();
+    let source = CancelToken.source();
 
     const cachiosPromise = cachiosInstance.get(url, {
       cancelToken: source.token,
@@ -35,6 +35,21 @@ describe('cachios cancelling', () => {
       // we should receive the normal axios cancel exception here
       // (and no "null" issues)
       expect(ex.message).toBe('test');
+    }
+
+    source = CancelToken.source();
+
+    moxios.stubRequest(url, {
+      status: 200,
+    });
+
+    try {
+      const resp = await cachiosInstance.get(url, {
+        cancelToken: source.token,
+      });
+      expect(resp.status).toBe(200);
+    } catch (ex) {
+      throw new Error(`The cancelled request was unexpectedly cached, reproducing https://github.com/AlbinoDrought/cachios/issues/55`);
     }
   });
 });
