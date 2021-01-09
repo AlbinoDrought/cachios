@@ -1,9 +1,8 @@
 # Cachios
 
-[![Greenkeeper badge](https://badges.greenkeeper.io/AlbinoDrought/cachios.svg)](https://greenkeeper.io/)
 [![Dependency Status](https://david-dm.org/albinodrought/cachios.svg)](https://david-dm.org/albinodrought/cachios)
 [![npm version](https://badge.fury.io/js/cachios.svg)](https://badge.fury.io/js/cachios)
-[![Build Status](https://travis-ci.org/AlbinoDrought/cachios.svg?branch=master)](https://travis-ci.org/AlbinoDrought/cachios)
+![Build Status: Node.js CI](https://github.com/AlbinoDrought/cachios/workflows/Node.js%20CI/badge.svg)
 [![Coverage Status](https://coveralls.io/repos/github/AlbinoDrought/cachios/badge.svg?branch=master)](https://coveralls.io/github/AlbinoDrought/cachios?branch=master)
 
 [![NPM](https://nodei.co/npm/cachios.png)](https://nodei.co/npm/cachios/)
