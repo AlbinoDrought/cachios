@@ -13,7 +13,8 @@
     "collectCoverageFrom": [
       "src/**/*.js"
     ],
-    "coverageDirectory": "tests/coverage"
+    "coverageDirectory": "tests/coverage",
+    "testEnvironment": "node"
   },
   "repository": {
     "type": "git",
@@ -37,7 +38,7 @@
   "devDependencies": {
     "coveralls": "^3.0.0",
     "express": "^4.16.2",
-    "jest": "^24.7.1",
+    "jest": "^26.6.3",
     "moxios": "^0.4.0"
   }
 }
