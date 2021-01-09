@@ -1,3 +1,7 @@
+# 2.2.5
+
+Prevents issues with sharing cancelled promises: https://github.com/AlbinoDrought/cachios/issues/55
+
 # 2.2.4
 
 Support Axios ^0.21.0 and ^0.20.0 in addition to ^0.18.0 and ^0.19.0
