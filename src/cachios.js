@@ -48,11 +48,14 @@ Cachios.prototype.request = function request(config) {
   var force = config.force || false;
   var cacheablePromise = !config.cancelToken; // refuse to cache cancellable requests until their promise has resolved
   var cacheKey = this.getCacheKey(config);
-  var cachedValue = this.getCachedValue(cacheKey);
 
-  // if we find a cached value, return it immediately
-  if (cachedValue !== undefined && force !== true) {
-    return Promise.resolve(cachedValue);
+  // if we're not forcing this request to ignore cache,
+  // check for a cached value and return it immediately if found
+  if (force !== true) {
+    var cachedValue = this.getCachedValue(cacheKey);
+    if (cachedValue !== undefined) {
+      return Promise.resolve(cachedValue);
+    }
   }
 
   // if we find a staging promise (a request that has not yet completed, so it is not yet in cache),
