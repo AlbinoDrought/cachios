@@ -1,0 +1,6 @@
+{
+  "license": "PUBLIC DOMAIN",
+  "dependencies": {
+    "cachios": "file:./../.."
+  }
+}
