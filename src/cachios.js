@@ -44,15 +44,19 @@ Cachios.prototype.setCachedValue = function (cacheKey, value, ttl) {
 };
 
 Cachios.prototype.request = function request(config) {
+  return handleRequest(this, config);
+};
+
+function handleRequest(instance, config, force) {
   var ttl = config.ttl;
-  var force = config.force || false;
+  var force = force || config.force || false;
   var cacheablePromise = !config.cancelToken; // refuse to cache cancellable requests until their promise has resolved
-  var cacheKey = this.getCacheKey(config);
+  var cacheKey = instance.getCacheKey(config);
 
   // if we're not forcing this request to ignore cache,
   // check for a cached value and return it immediately if found
   if (force !== true) {
-    var cachedValue = this.getCachedValue(cacheKey);
+    var cachedValue = instance.getCachedValue(cacheKey);
     if (cachedValue !== undefined) {
       return Promise.resolve(cachedValue);
     }
@@ -60,33 +64,33 @@ Cachios.prototype.request = function request(config) {
 
   // if we find a staging promise (a request that has not yet completed, so it is not yet in cache),
   // return it.
-  if (cacheablePromise && this.stagingPromises[cacheKey]) {
-    return this.stagingPromises[cacheKey];
+  if (cacheablePromise && instance.stagingPromises[cacheKey]) {
+    return instance.stagingPromises[cacheKey];
   }
 
   // otherwise, send a real request and cache the value for later
-  var me = this;
-  var pendingPromise = this.axiosInstance.request(config);
+  var pendingPromise = instance.axiosInstance.request(config);
 
   // store the promise in stagingPromises so it can be used before completing
   // we don't store it in the cache immediately because:
   // - we don't want it in the cache if the request fails
   // - our cache backend may not support promises
   if (cacheablePromise) {
-    this.stagingPromises[cacheKey] = pendingPromise;
+    instance.stagingPromises[cacheKey] = pendingPromise;
   }
 
   // once the request successfully completes, store it in cache
   pendingPromise.then(function (resp) {
-    me.setCachedValue(cacheKey, me.getResponseCopy(resp), ttl);
+    instance.setCachedValue(cacheKey, instance.getResponseCopy(resp), ttl);
   }).catch(function () {}).then(function () {
     // always delete the staging promise once the request is complete
     // (finished or failed)
-    delete me.stagingPromises[cacheKey];
+    delete instance.stagingPromises[cacheKey];
   });
+
   // return the original promise
   return pendingPromise;
-};
+}
 
 extendPrototype(Cachios.prototype);
 
