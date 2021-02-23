@@ -1,0 +1,8 @@
+{
+  "license": "PUBLIC DOMAIN",
+  "dependencies": {
+    "@keyv/sqlite": "^2.0.2",
+    "cachios": "file:./../..",
+    "keyv": "^4.0.3"
+  }
+}
