@@ -181,7 +181,9 @@ cachios.cache = {
   cacheKey: string
 
   if a value has been set for this `cacheKey`, return it.
-  otherwise, return a falsey value (undefined, false, null)
+  otherwise, return a falsey value (undefined, false, null).
+
+  synchronous, asynchronous, and promise-returning functions are supported.
   */
   get(cacheKey),
 
@@ -192,6 +194,8 @@ cachios.cache = {
 
   store the value `cacheValue` under `cacheKey` for `ttl` seconds.
   if `ttl` is not set, it is assumed the value is stored forever.
+
+  synchronous, asynchronous, and promise-returning functions are supported.
   */
   set(cacheKey, cacheValue, ttl),
 }
@@ -209,6 +213,22 @@ cachios.get('http://example.com/') // not cached
 .then(() => cachios.get('http://example.com/')); // cached
 .then(() => {
   console.log(cachios.cache.itemCount); // 1 item in cache - the first request
+});
+```
+
+Example of persistent cache with `keyv` and `@keyv/sqlite`:
+
+```js
+const cachios = require('cachios');
+const Keyv = require('keyv');
+
+cachios.cache = new Keyv('sqlite://cache.sqlite');
+
+cachios.get('http://example.com/') // not cached
+.then(() => cachios.get('http://example.com/')); // cached
+.then(() => cachios.cache.opts.store.query('SELECT COUNT(*) as count FROM keyv'))
+.then((cacheSize) => {
+  console.log(cacheSize[0].count); // 1 item in cache - the first request
 });
 ```
 
