@@ -58,7 +58,20 @@ function handleRequest(instance, config, force) {
   if (force !== true) {
     var cachedValue = instance.getCachedValue(cacheKey);
     if (cachedValue !== undefined) {
-      return Promise.resolve(cachedValue);
+      return Promise.resolve(cachedValue)
+        // #61: support async cache repositories
+        // some async repositories  `resolve(undefined)` when a value is missing from cache, others `reject()`
+        // if either of these happen, retry the request but ignore cache using force: true
+        .then(function (result) {
+          if (result === undefined) {
+            return handleRequest(instance, config, true);
+          }
+
+          return result;
+        })
+        .catch(function () {
+          return handleRequest(instance, config, true);
+        });
     }
   }
 
@@ -81,7 +94,9 @@ function handleRequest(instance, config, force) {
 
   // once the request successfully completes, store it in cache
   pendingPromise.then(function (resp) {
-    instance.setCachedValue(cacheKey, instance.getResponseCopy(resp), ttl);
+    // #61: support async cache repositories
+    // allow the possibly-async setCachedValue result to bubble up the promise chain
+    return instance.setCachedValue(cacheKey, instance.getResponseCopy(resp), ttl);
   }).catch(function () {}).then(function () {
     // always delete the staging promise once the request is complete
     // (finished or failed)
