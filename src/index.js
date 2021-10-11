@@ -9,3 +9,5 @@ instance.create = function create(axiosInstance, nodeCacheConf) {
 };
 
 module.exports = instance;
+// better `import cachios from 'cachios';` typescript support:
+module.exports.default = instance;
