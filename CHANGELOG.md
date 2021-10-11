@@ -1,3 +1,7 @@
+# 3.1.0
+
+Adds initial Typescript support.
+
 # 3.0.0
 
 Adds support for asynchronous cache repositories like [keyv](https://www.npmjs.com/package/keyv): https://github.com/AlbinoDrought/cachios/issues/61
