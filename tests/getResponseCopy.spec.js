@@ -1,15 +1,17 @@
 const cachios = require('./../src');
 
 const axios = require('axios');
-const moxios = require('moxios');
+const MockAdapter = require('axios-mock-adapter');
 
 describe('cachios.getResponseCopy', () => {
+  let mock;
+
   beforeEach(() => {
-    moxios.install(axios);
+    mock = new MockAdapter(axios);
   });
 
   afterEach(() => {
-    moxios.uninstall(axios);
+    mock.reset();
   });
 
   test('should be set by default', () => {
@@ -23,6 +25,10 @@ describe('cachios.getResponseCopy', () => {
   test('should be used to copy responses', (done) => {
     const instance = cachios.create(axios);
     const url = 'http://localhost/fake-url';
+
+    mock.onGet(url).replyOnce(200, {
+      foo: 'bar',
+    });
 
     instance.getResponseCopy = (resp) => ({
       status: resp.status,
@@ -42,15 +48,5 @@ describe('cachios.getResponseCopy', () => {
       expect(resp.answer).toBe('yes');
     })
     .then(() => done());
-
-    moxios.wait(() => {
-      moxios.requests.mostRecent()
-        .respondWith({
-          status: 200,
-          response: {
-            foo: 'bar',
-          },
-        });
-    });
   });
 });
