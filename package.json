@@ -31,14 +31,14 @@
   },
   "homepage": "https://github.com/AlbinoDrought/cachios#readme",
   "dependencies": {
-    "axios": "^0.18.0 || ^0.19.0 || ^0.20.0 || ^0.21.0",
-    "node-cache": "^4.1.1 || ^5.0.0",
+    "axios": "^0.21.0 || ^0.20.0 || ^0.19.0 || ^0.18.0",
+    "node-cache": "^5.0.0 || ^4.1.1",
     "object-hash": "^2.0.0"
   },
   "devDependencies": {
+    "axios-mock-adapter": "^1.20.0",
     "coveralls": "^3.0.0",
     "express": "^4.16.2",
-    "jest": "^26.6.3",
-    "moxios": "^0.4.0"
+    "jest": "^27.2.5"
   }
 }

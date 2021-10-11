@@ -1,7 +1,7 @@
 const cachios = require('./../src');
 
 const axios = require('axios');
-const moxios = require('moxios');
+const MockAdapter = require('axios-mock-adapter');
 
 const datalessMethods = [
   'delete',
@@ -17,12 +17,14 @@ const dataMethods = [
 ];
 
 describe('cachios', () => {
+  let mock;
+
   beforeEach(() => {
-    moxios.install(axios);
+    mock = new MockAdapter(axios);
   });
 
   afterEach(() => {
-    moxios.uninstall(axios);
+    mock.reset();
   });
 
   datalessMethods.concat(dataMethods).forEach((method) => {
@@ -39,14 +41,8 @@ describe('cachios', () => {
         const cachiosInstance = cachios.create(axios);
         const url = 'http://localhost/fake-url';
 
+        mock.onAny(url).replyOnce(200);
         cachiosInstance[method](url).then(() => { done(); });
-
-        moxios.wait(function() {
-          moxios.requests.mostRecent().respondWith({
-            status: 200,
-            response: {},
-          });
-        });
       });
 
       test('should be cached', done => {
@@ -54,29 +50,23 @@ describe('cachios', () => {
         const time = Date.now();
         const url = 'http://localhost/fake-url';
 
+        mock.onAny(url).replyOnce(200, {
+          time: time,
+        });
+
         let promise = cachiosInstance[method](url, {
           ttl: 60,
         });
 
-        moxios.wait(function() {
-          let request = moxios.requests.mostRecent();
-          request.respondWith({
-            status: 200,
-            response: {
-              time: time,
-            }
-          });
+        for(let i = 0; i < 10; i += 1) {
+          promise = promise.then(() => cachiosInstance[method](url, {
+            ttl: 60,
+          }).then((resp) => {
+            expect(resp.data.time).toBe(time);
+          }));
+        }
 
-          for(let i = 0; i < 10; i += 1) {
-            promise = promise.then(() => cachiosInstance[method](url, {
-              ttl: 60,
-            }).then((resp) => {
-              expect(resp.data.time).toBe(time);
-            }));
-          }
-
-          promise.then(done);
-        });
+        promise.then(done);
       });
     });
   });
@@ -90,14 +80,8 @@ describe('cachios', () => {
           stuff: 'yes',
         };
 
+        mock.onAny(url).replyOnce(200);
         cachiosInstance[method](url, postData).then(() => { done(); });
-
-        moxios.wait(function() {
-          moxios.requests.mostRecent().respondWith({
-            status: 200,
-            response: {},
-          });
-        });
       });
 
       test('should be cached', done => {
@@ -108,31 +92,24 @@ describe('cachios', () => {
           stuff: 'yes',
         };
 
+        mock.onAny(url).replyOnce(200, {
+          time: time,
+        });
+
         let promise = cachiosInstance[method](url, postData, {
           ttl: 60,
         });
 
-        moxios.wait(function() {
-          let request = moxios.requests.mostRecent();
-          request.respondWith({
-            status: 200,
-            response: {
-              time: time,
-            }
-          });
+        for(let i = 0; i < 10; i += 1) {
+          promise = promise.then(() => cachiosInstance[method](url, postData, {
+            ttl: 60,
+          }).then((resp) => {
+            expect(resp.data.time).toBe(time);
+          }));
+        }
 
-          for(let i = 0; i < 10; i += 1) {
-            promise = promise.then(() => cachiosInstance[method](url, postData, {
-              ttl: 60,
-            }).then((resp) => {
-              expect(resp.data.time).toBe(time);
-            }));
-          }
-
-          promise.then(done);
-        });
+        promise.then(done);
       });
     });
-
   });
 });

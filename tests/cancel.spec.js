@@ -1,15 +1,17 @@
 const cachios = require('./../src');
 
 const axios = require('axios');
-const moxios = require('moxios');
+const MockAdapter = require('axios-mock-adapter');
 
 describe('cachios cancelling', () => {
+  let mock;
+
   beforeEach(() => {
-    moxios.install(axios);
+    mock = new MockAdapter(axios);
   });
 
   afterEach(() => {
-    moxios.uninstall(axios);
+    mock.reset();
   });
 
   test('nothing should explode if a request is cancelled', async () => {
@@ -39,9 +41,7 @@ describe('cachios cancelling', () => {
 
     source = CancelToken.source();
 
-    moxios.stubRequest(url, {
-      status: 200,
-    });
+    mock.onGet(url).reply(200);
 
     try {
       const resp = await cachiosInstance.get(url, {
