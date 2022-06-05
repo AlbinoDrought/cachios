@@ -32,7 +32,7 @@
   },
   "homepage": "https://github.com/AlbinoDrought/cachios#readme",
   "dependencies": {
-    "axios": "^0.21.0 || ^0.20.0 || ^0.19.0 || ^0.18.0",
+    "axios": "^0.24.0 || ^0.23.0 || ^0.22.0 || ^0.21.0 || ^0.20.0 || ^0.19.0 || ^0.18.0",
     "node-cache": "^5.0.0 || ^4.1.1",
     "object-hash": "^2.0.0"
   },
