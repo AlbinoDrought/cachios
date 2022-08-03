@@ -1,0 +1,14 @@
+{
+  "name": "cachios-typescript",
+  "scripts": {
+    "build": "rm -rf out && tsc -p ./"
+  },
+  "devDependencies": {
+    "@types/node": "^16.10.3",
+    "typescript": "^4.7.4"
+  },
+  "dependencies": {
+    "axios": "^0.27.2",
+    "cachios": "file:../../../"
+  }
+}

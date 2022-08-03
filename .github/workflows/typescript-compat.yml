@@ -1,0 +1,22 @@
+name: Typescript Compat
+
+on: [push]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [18.x] # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v1
+      with:
+        node-version: ${{ matrix.node-version }}
+
+    - run: npm ci
+    - name: Try Building Typescript Project
+      run: cd tests/integration/cachios-typescript && npm install && npm install "axios@latest" --no-save && npm run build
