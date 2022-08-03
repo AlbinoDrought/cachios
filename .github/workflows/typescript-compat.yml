@@ -1,6 +1,9 @@
 name: Typescript Compat
 
-on: [push]
+on:
+  push:
+  schedule:
+    - cron: "20 4 * * 6"
 
 jobs:
   test:
