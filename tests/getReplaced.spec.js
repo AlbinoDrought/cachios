@@ -1,6 +1,7 @@
 /**
  * @jest-environment jsdom
- */const cachios = require('./../src');
+ */
+const cachios = require('./../src');
 
 const axios = require('axios');
 const hash = require('object-hash');
