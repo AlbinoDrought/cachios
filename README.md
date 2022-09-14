@@ -292,6 +292,24 @@ cachios.getCacheIdentifier = function (config) {
 };
 ```
 
+### Custom object-hash Replacer
+
+By default, Cachios uses an internal `defaultReplacer` function to add FormData support to [object-hash](https://github.com/puleos/object-hash).
+
+To override this, set the `getReplaced` property of your Cachios instance:
+
+```js
+const cachios = require('cachios');
+
+cachios.getReplaced = function (thing) {
+  if (thing === 'foo') {
+    return 'bar';
+  }
+
+  return thing;
+};
+```
+
 ## License
 
 [MIT](LICENSE.md)

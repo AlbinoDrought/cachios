@@ -18,6 +18,23 @@ function defaultResponseCopier(response) {
   };
 }
 
+function defaultReplacer(thing) {
+  // object-hash doesn't handle FormData values, do it ourselves
+  // https://github.com/AlbinoDrought/cachios/issues/7
+  if (typeof FormData !== 'undefined' && thing instanceof FormData) {
+    var formDataValues = {};
+    var entriesIterator = thing.entries();
+    for (var entry = entriesIterator.next(); !entry.done || typeof entry.value !== 'undefined'; entry = entriesIterator.next()) {
+      formDataValues[entry.value[0]] = defaultReplacer(entry.value[1]);
+    }
+    return formDataValues;
+  }
+
+  // object-hash also doesn't support blobs, but I don't think we can read those synchronously
+
+  return thing;
+}
+
 function Cachios(axiosInstance, nodeCacheConf) {
   this.axiosInstance = axiosInstance;
   this.cache = new NodeCache(nodeCacheConf || {
@@ -29,10 +46,13 @@ function Cachios(axiosInstance, nodeCacheConf) {
 
   this.getCacheIdentifier = defaultCacheIdentifer;
   this.getResponseCopy = defaultResponseCopier;
+  this.getReplaced = defaultReplacer;
 }
 
 Cachios.prototype.getCacheKey = function (config) {
-  return hash(this.getCacheIdentifier(config));
+  return hash(this.getCacheIdentifier(config), {
+    replacer: this.getReplaced,
+  });
 };
 
 Cachios.prototype.getCachedValue = function (cacheKey) {
