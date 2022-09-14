@@ -1,3 +1,11 @@
+# 4.0.0
+
+Uses an [object-hash replacer](https://github.com/puleos/object-hash#hashvalue-options) to transform FormData objects to key-value object maps before hashing.
+
+This allows requests using FormData to be cached: https://github.com/AlbinoDrought/cachios/issues/7
+
+Applications that relied on exceptions being thrown when sending FormData requests through Cachios should be modified to expect the updated behaviour.
+
 # 3.1.0
 
 Adds initial Typescript support.
